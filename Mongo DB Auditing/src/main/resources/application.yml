@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: Mongo-Auditing
+  data:
+    mongodb:
+      uri: mongodb://127.0.0.1:27017/audit-database
+
+logging:
+  level:
+    com.spring.mongo: TRACE
+
+
+
+audit:
+  mongo:
+    base-packages: com.audit.mongo, com.ruchira.collections
