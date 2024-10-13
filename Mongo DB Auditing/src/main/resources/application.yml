@@ -1,14 +1,24 @@
 spring:
-  application:
-    name: Mongo-Auditing
+  jmx:
+    enabled: true
+  application.name: Mongo-Auditing
   data:
     mongodb:
       uri: mongodb://127.0.0.1:27017/audit-database
 
-logging:
-  level:
-    com.spring.mongo: TRACE
+server:
+  servlet:
+    context-path: /mongo-auditing-api
 
+#logging:
+#  config: classpath:logback-spring.xml1
+
+# All traces should be sent to latency analysis tool
+management.tracing.sampling.probability: 1.0
+
+management.endpoint.prometheus.enabled: true
+management.endpoints.web.exposure.include: "*"
+management.endpoint.health.show-details: ALWAYS
 
 
 audit:

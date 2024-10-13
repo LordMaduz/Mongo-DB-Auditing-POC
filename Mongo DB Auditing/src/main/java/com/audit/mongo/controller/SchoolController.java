@@ -9,21 +9,26 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.audit.mongo.listener.MongoChangeListener;
 import com.audit.mongo.model.School;
 import com.audit.mongo.repo.SchoolRepository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/school")
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class SchoolController {
 
     private final SchoolRepository schoolRepository;
 
     @PostMapping
     public School createUpdate(@RequestBody School school) {
+        log.info("Request Received");
         return schoolRepository.save(school);
     }
 
