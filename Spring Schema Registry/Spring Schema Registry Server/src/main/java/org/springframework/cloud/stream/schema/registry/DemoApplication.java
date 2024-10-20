@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 @EnableMongoSchemaRegistryServer
-public class DemoApplication {
+public class SpringSchemaRegistryServer {
 
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
