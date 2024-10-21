@@ -11,7 +11,7 @@ spring:
         enabled: false
       schema:
         avro:
-          schema-locations: classpath:avro/cloudevents.avsc
+          schema-locations: [classpath:avro/cloudevents.avsc]
       kafka:
         bindings:
           process-group:
