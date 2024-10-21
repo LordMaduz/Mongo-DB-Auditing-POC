@@ -7,6 +7,8 @@ spring:
           group: group_1
       schema-registry-client:
         endpoint: http://localhost:8080
+      schemaRegistryClient:
+        enabled: false
       schema:
         avro:
           schema-locations: classpath:avro/cloudevents.avsc
