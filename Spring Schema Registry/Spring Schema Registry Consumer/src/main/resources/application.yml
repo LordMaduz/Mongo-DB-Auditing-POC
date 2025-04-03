@@ -1,0 +1,23 @@
+spring:
+  cloud:
+    stream:
+      bindings:
+        process-in-0:
+          destination: spring_schema_registry_channel
+          group: group_1
+      schema-registry-client:
+        endpoint: http://localhost:8080
+      schema:
+        avro:
+          schema-locations: [classpath:avro/cloudevent.avsc, classpath:avro/sensor.avsc]
+      schemaRegistryClient:
+        enabled: false
+      kafka:
+        binder:
+          brokers: localhost:9094
+        bindings:
+          process-group:
+            consumer:
+              autoCommitOffset: false
+              reset-offsets: true
+server.port: 9999

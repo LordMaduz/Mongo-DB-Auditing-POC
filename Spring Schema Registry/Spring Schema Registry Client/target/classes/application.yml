@@ -1,0 +1,19 @@
+spring:
+  cloud:
+    stream:
+      bindings:
+        supplier-out-0:
+          contentType: application/*+avro
+          destination: spring_schema_registry_channel
+      schema-registry-client:
+        endpoint: http://localhost:8080
+      schema:
+        avro:
+          schema-locations: [ classpath:avro/cloudevent.avsc, classpath:avro/sensor.avsc ]
+      schemaRegistryClient:
+        enabled: false
+      kafka:
+        binder:
+          brokers: localhost:9094
+
+server.port: 9010
