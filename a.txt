@@ -1,0 +1,29 @@
+@Aggregation(pipeline = {
+    "{ '$match': { 'juriId': ?0 } }",
+    "{ '$addFields': { " +
+        "'safeHarbourInfo': { " +
+            "'$map': { " +
+                "'input': '$inputCatalog.safeHarbour', " +
+                "'as': 'sh', " +
+                "'in': { " +
+                    "'subGroupName': '$$sh.subGroupName', " +
+                    "'subGroupId': '$$sh.subGroupId', " +
+                    "'qdmtt': { " +
+                        "'$cond': [ " +
+                            "{ '$regexMatch': { 'input': '$$sh.safeHarbourType._class', 'regex': '.*QDMTTSafeHarbour$' } }, " +
+                            "'$$sh.safeHarbourType', " +
+                            "null " +
+                        "] " +
+                    "}, " +
+                    "'cbcr': { " +
+                        "'$cond': [ " +
+                            "{ '$regexMatch': { 'input': '$$sh.safeHarbourType._class', 'regex': '.*CBCRSafeHarbour$' } }, " +
+                            "'$$sh.safeHarbourType', " +
+                            "null " +
+                        "] " +
+                    "} " +
+                "} " +
+            "} " +
+        "} " +
+    "} }"
+})
