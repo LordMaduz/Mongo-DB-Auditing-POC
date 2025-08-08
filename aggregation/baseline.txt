@@ -1,41 +1,41 @@
 @Aggregation(pipeline = {
             // 1. Match on filingType and accountingYear
-            "{ \"$match\": { \"filingType\": ?0, \"accountingYear\": ?1 } }",
+            "{ '$match': { 'filingType': ?0, 'accountingYear': ?1 } }",
 
             // 2. Group all documents by filingType and accountingYear
-            "{ \"$group\": { " +
-                    "\"_id\": { \"filingType\": \"$filingType\", \"accountingYear\": \"$accountingYear\" }, " +
-                    "\"docs\": { \"$push\": \"$$ROOT\" } " +
+            "{ '$group': { " +
+                    "'_id': { 'filingType': '$filingType', 'accountingYear': '$accountingYear' }, " +
+                    "'docs': { '$push': '$$ROOT' } " +
                     "} }",
 
             // 3. Filter preferred rerun and fallback baseline
-            "{ \"$project\": { " +
-                    "\"preferred\": { \"$filter\": { " +
-                    "\"input\": \"$docs\", " +
-                    "\"as\": \"doc\", " +
-                    "\"cond\": { \"$and\": [ " +
-                    "{ \"$eq\": [ \"$$doc.runStatus\", \"Rerun\" ] }, " +
-                    "{ \"$eq\": [ \"$$doc.runYear\", ?2 ] } " +
+            "{ '$project': { " +
+                    "'preferred': { '$filter': { " +
+                    "'input': '$docs', " +
+                    "'as': 'doc', " +
+                    "'cond': { '$and': [ " +
+                    "{ '$eq': [ '$$doc.runStatus', 'Rerun' ] }, " +
+                    "{ '$eq': [ '$$doc.runYear', ?2 ] } " +
                     "] } " +
                     "} }, " +
-                    "\"baseline\": { \"$filter\": { " +
-                    "\"input\": \"$docs\", " +
-                    "\"as\": \"doc\", " +
-                    "\"cond\": { \"$and\": [ " +
-                    "{ \"$eq\": [ \"$$doc.runStatus\", \"Baseline\" ] }, " +
-                    "{ \"$not\": [ { \"$ifNull\": [ \"$$doc.runYear\", false ] } ] }" +
+                    "'baseline': { '$filter': { " +
+                    "'input': '$docs', " +
+                    "'as': 'doc', " +
+                    "'cond': { '$and': [ " +
+                    "{ '$eq': [ '$$doc.runStatus', 'Baseline' ] }, " +
+                    "{ '$not': [ { '$ifNull': [ '$$doc.runYear', false ] } ] } " +
                     "] } " +
                     "} } " +
                     "} }",
 
-            // 4. Concatenate preferred and baseline, pick the first
-            "{ \"$project\": { " +
-                    "\"finalChoice\": { \"$concatArrays\": [ \"$preferred\", \"$baseline\" ] } " +
+            // 4. Concatenate preferred and baseline
+            "{ '$project': { " +
+                    "'finalChoice': { '$concatArrays': [ '$preferred', '$baseline' ] } " +
                     "} }",
 
-            // 5. Pick first doc
-            "{ \"$project\": { \"selected\": { \"$arrayElemAt\": [ \"$finalChoice\", 0 ] } } }",
+            // 5. Pick the first document
+            "{ '$project': { 'selected': { '$arrayElemAt': [ '$finalChoice', 0 ] } } }",
 
-            // 6. Replace root with selected
-            "{ \"$replaceRoot\": { \"newRoot\": \"$selected\" } }"
+            // 6. Replace root
+            "{ '$replaceRoot': { 'newRoot': '$selected' } }"
     })
